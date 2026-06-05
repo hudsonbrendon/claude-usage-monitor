@@ -87,7 +87,11 @@ color:#15161a;font-weight:700}</style></head><body><div class=c><h1>AI Usage Mon
 <input name=ssid required maxlength=32><label>Wi-Fi password</label>
 <input name=password type=password maxlength=64>
 <label>Claude token (run: claude setup-token)</label>
-<input name=token required maxlength=200 placeholder="sk-ant-oat01-...">
+<input name=token maxlength=200 placeholder="sk-ant-oat01-... (Claude, optional)">
+<label>Codex token (~/.codex/auth.json access_token)</label>
+<input name=codexToken maxlength=2200 placeholder="(optional)">
+<label>Codex account id</label>
+<input name=codexAccountId maxlength=64 placeholder="(optional)">
 <label>Refresh</label><select name=poll><option value=60>60 s</option>
 <option value=120 selected>2 min</option><option value=300>5 min</option></select>
 <button type=submit>Save & restart</button></form></div></body></html>)HTML";
@@ -112,10 +116,14 @@ static void runPortalAndReboot() {
         s.ssid = server.arg("ssid").c_str();
         s.password = server.arg("password").c_str();
         s.token = server.arg("token").c_str();
+        s.codexToken = server.arg("codexToken").c_str();
+        s.codexAccountId = server.arg("codexAccountId").c_str();
         long p = server.arg("poll").toInt();
         s.pollSeconds = (p >= 30 && p <= 600) ? (uint16_t)p : 120;
-        s.configured = !s.ssid.empty() && !s.token.empty();
-        if (!s.configured) { server.send(400, "text/plain", "ssid and token required"); return; }
+        bool hasClaude = !s.token.empty();
+        bool hasCodex  = !s.codexToken.empty() && !s.codexAccountId.empty();
+        s.configured = !s.ssid.empty() && (hasClaude || hasCodex);
+        if (!s.configured) { server.send(400, "text/plain", "need wifi + at least one provider"); return; }
         if (!storage.save(s)) { server.send(500, "text/plain", "save failed"); return; }
         server.send(200, "text/html", "<meta charset=utf-8>Saved. Restarting...");
         done = true;
