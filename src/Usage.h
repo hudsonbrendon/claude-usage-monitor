@@ -15,5 +15,9 @@ struct UsageStatus {
 UsageStatus parseUsage(const char* h5util, const char* h5reset,
                        const char* d7util, const char* d7reset);
 
+// Parse the Codex /backend-api/codex/usage JSON body into a UsageStatus.
+// Reads rate_limit.primary_window (5h) and .secondary_window (weekly).
+UsageStatus parseCodexUsage(const char* json);
+
 // "3d4h" / "2h05m" / "12m" / "now" / "--" into out.
 void formatCountdown(uint32_t epoch, uint32_t now, char* out, size_t outLen);

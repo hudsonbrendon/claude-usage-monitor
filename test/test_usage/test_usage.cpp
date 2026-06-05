@@ -43,6 +43,25 @@ void test_countdown_unknown(void) {
     char b[16]; formatCountdown(0u, 1000000u, b, sizeof(b));
     TEST_ASSERT_EQUAL_STRING("--", b);
 }
+void test_codex_parse_typical(void) {
+    const char* j = "{\"plan_type\":\"plus\",\"rate_limit\":{\"allowed\":true,"
+        "\"primary_window\":{\"used_percent\":65,\"reset_at\":1781000000},"
+        "\"secondary_window\":{\"used_percent\":62,\"reset_at\":1781500000}}}";
+    UsageStatus s = parseCodexUsage(j);
+    TEST_ASSERT_TRUE(s.valid);
+    TEST_ASSERT_FLOAT_WITHIN(0.01f, 65.0f, s.h5Percent);
+    TEST_ASSERT_FLOAT_WITHIN(0.01f, 62.0f, s.d7Percent);
+    TEST_ASSERT_EQUAL_UINT32(1781000000u, s.h5Reset);
+    TEST_ASSERT_EQUAL_UINT32(1781500000u, s.d7Reset);
+}
+void test_codex_parse_no_ratelimit_invalid(void) {
+    UsageStatus s = parseCodexUsage("{\"plan_type\":\"plus\"}");
+    TEST_ASSERT_FALSE(s.valid);
+}
+void test_codex_parse_malformed_invalid(void) {
+    UsageStatus s = parseCodexUsage("{not json");
+    TEST_ASSERT_FALSE(s.valid);
+}
 void setUp(void) {}
 void tearDown(void) {}
 int main(int, char**) {
@@ -56,5 +75,8 @@ int main(int, char**) {
     RUN_TEST(test_countdown_minutes);
     RUN_TEST(test_countdown_now);
     RUN_TEST(test_countdown_unknown);
+    RUN_TEST(test_codex_parse_typical);
+    RUN_TEST(test_codex_parse_no_ratelimit_invalid);
+    RUN_TEST(test_codex_parse_malformed_invalid);
     return UNITY_END();
 }
