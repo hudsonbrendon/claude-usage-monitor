@@ -15,7 +15,7 @@ public:
     virtual bool    held(uint32_t ms) = 0; // currently held >= ms (factory reset)
     virtual int     battery()           { return -1; }   // -1 = none
     virtual void    brightness(uint8_t) {}               // 0=off..n
-    virtual const char* apPrefix()      { return "ClaudeUsage"; }
+    virtual const char* apPrefix()      { return "AIUsage"; }
 };
 
 IBoard& Board();   // defined by the selected board file

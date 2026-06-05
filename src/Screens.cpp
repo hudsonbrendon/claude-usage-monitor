@@ -37,7 +37,7 @@ void splash(Canvas& c, const char* sub) {
     c.clear();
     Scale ts = titleScale(c);
     int y = c.height() / 2 - c.lineHeight(ts);
-    centered(c, y, ts, Ink::Accent, "Claude Usage");
+    centered(c, y, ts, Ink::Accent, "AI Usage");
     centered(c, y + c.lineHeight(ts) + 2, Scale::Small, Ink::Dim, sub);
     c.present();
 }

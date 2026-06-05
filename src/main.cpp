@@ -61,13 +61,13 @@ static void draw() {
 
 static const char PORTAL_HTML[] PROGMEM = R"HTML(<!doctype html><html><head>
 <meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1">
-<title>Claude Usage Setup</title><style>body{font-family:system-ui;background:#15161a;
+<title>AI Usage Setup</title><style>body{font-family:system-ui;background:#15161a;
 color:#e6e6e6;margin:0;padding:16px}.c{max-width:420px;margin:auto;background:#22242b;
 padding:18px;border-radius:12px}h1{font-size:1.2em;margin:0 0 12px}label{display:block;
 font-size:.85em;color:#9aa;margin:10px 0 4px}input,select{width:100%;box-sizing:border-box;
 padding:9px;border-radius:8px;border:1px solid #3a3d47;background:#15161a;color:#e6e6e6}
 button{width:100%;margin-top:16px;padding:11px;border:0;border-radius:8px;background:#d97a4a;
-color:#15161a;font-weight:700}</style></head><body><div class=c><h1>Claude Usage Monitor</h1>
+color:#15161a;font-weight:700}</style></head><body><div class=c><h1>AI Usage Monitor</h1>
 <form method=POST action=/save><label>Wi-Fi network (2.4 GHz)</label>
 <input name=ssid required maxlength=32><label>Wi-Fi password</label>
 <input name=password type=password maxlength=64>

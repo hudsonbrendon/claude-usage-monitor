@@ -55,7 +55,7 @@ UsageStatus ClaudeProvider::fetch(const String& token, char* errOut, size_t errL
     https.addHeader("anthropic-version", "2023-06-01");
     https.addHeader("anthropic-beta", "oauth-2025-04-20");
     https.addHeader("content-type", "application/json");
-    https.addHeader("User-Agent", "claude-usage-monitor/1.0");
+    https.addHeader("User-Agent", "ai-usage-monitor/1.0");
     https.setTimeout(15000);
 
     const char* keys[] = {
