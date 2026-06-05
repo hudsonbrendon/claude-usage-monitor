@@ -15,7 +15,9 @@ bool Storage::load(Settings& out) {
     return settingsFromJson(json.c_str(), out);
 }
 bool Storage::save(const Settings& s) {
-    char buf[512];
+    // Big enough for a Codex access_token (~1900 chars) plus the other fields.
+    // static (not on the stack) to avoid an ESP8266 stack overflow.
+    static char buf[4096];
     if (!settingsToJson(s, buf, sizeof(buf))) return false;
     File f = LittleFS.open(PATH, "w");
     if (!f) return false;
