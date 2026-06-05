@@ -11,14 +11,29 @@
 #include "Storage.h"
 #include "Provider.h"
 #include "providers/ClaudeProvider.h"
+#include "providers/CodexProvider.h"
 
 #include <ESP8266WebServer.h>     // portal lives inline; ESP8266-only for now
 #include <DNSServer.h>
 
-static Storage     storage;
+static Storage        storage;
 static ClaudeProvider claudeProvider;
-static Provider*      activeProvider = &claudeProvider;
-static Settings    settings;
+static CodexProvider  codexProvider;
+static Provider*      providers[] = { &claudeProvider, &codexProvider };
+static const int      PROVIDER_COUNT = 2;
+static int            activeIdx = 0;
+static Settings       settings;
+
+static void selectFirstAvailable() {
+    for (int i = 0; i < PROVIDER_COUNT; i++)
+        if (providers[i]->available(settings)) { activeIdx = i; return; }
+}
+static void cycleProvider() {
+    for (int step = 1; step <= PROVIDER_COUNT; step++) {
+        int idx = (activeIdx + step) % PROVIDER_COUNT;
+        if (providers[idx]->available(settings)) { activeIdx = idx; return; }
+    }
+}
 static UsageStatus status;
 static char        lastError[32] = "";
 static unsigned long lastFetchMs = 0;
@@ -47,13 +62,13 @@ static void syncClock() {
 
 static void refresh() {
     if (WiFi.status() != WL_CONNECTED) connectWifi();
-    status = activeProvider->fetch(String(settings.token.c_str()), lastError, sizeof(lastError));
+    status = providers[activeIdx]->fetch(settings, lastError, sizeof(lastError));
     lastFetchMs = millis();
 }
 
 static void draw() {
     if (status.valid)
-        Screens::dashboard(Board().canvas(), status, nowEpoch(),
+        Screens::dashboard(Board().canvas(), providers[activeIdx]->id(), status, nowEpoch(),
                             WiFi.RSSI(), (int)((millis() - lastFetchMs) / 1000));
     else
         Screens::error(Board().canvas(), "API ERROR", lastError);
@@ -128,6 +143,7 @@ void setup() {
     if (!storage.load(settings) || !settings.configured) {
         runPortalAndReboot();   // does not return
     }
+    selectFirstAvailable();
 
     if (!connectWifi()) {
         Screens::error(Board().canvas(), "WIFI FAILED", settings.ssid.c_str());
@@ -150,9 +166,11 @@ void loop() {
         delay(1500);
         ESP.restart();
     }
-    if (Board().tapped()) {                    // toggle screen
-        screenOn = !screenOn;
-        Board().brightness(screenOn ? 2 : 0);
+    if (Board().tapped()) {                    // cycle to the next configured provider
+        cycleProvider();
+        Screens::splash(Board().canvas(), providers[activeIdx]->id());
+        refresh();
+        draw();
     }
     if (Board().longPressed()) {               // force refresh
         Screens::splash(Board().canvas(), "refreshing...");

@@ -64,12 +64,12 @@ void connecting(Canvas& c, const char* ssid) {
     c.present();
 }
 
-void dashboard(Canvas& c, const UsageStatus& u, uint32_t now, int rssi, int secsAgo) {
+void dashboard(Canvas& c, const char* provider, const UsageStatus& u, uint32_t now, int rssi, int secsAgo) {
     c.clear();
     int W = c.width();
     Scale lbl = (W >= 100) ? Scale::Medium : Scale::Small;
     int lh = c.lineHeight(lbl);
-    char line[20], rst[16];
+    char line[28], rst[16];
 
     // Row 1 — 5H
     int y = 0;
@@ -88,7 +88,7 @@ void dashboard(Canvas& c, const UsageStatus& u, uint32_t now, int rssi, int secs
     bar(c, 2, y + lh, W - 4, 7, u.d7Percent);
 
     // Status line at the bottom
-    snprintf(line, sizeof(line), "%ddBm  %ds ago", rssi, secsAgo);
+    snprintf(line, sizeof(line), "%s  %ddBm  %ds", provider, rssi, secsAgo);
     c.text(2, c.height() - c.lineHeight(Scale::Small), Scale::Small, Ink::Dim, line);
     c.present();
 }

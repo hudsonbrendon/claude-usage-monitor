@@ -6,5 +6,6 @@
 class ClaudeProvider : public Provider {
 public:
     const char* id() override { return "Claude"; }
-    UsageStatus fetch(const String& token, char* errOut, size_t errLen) override;
+    bool available(const Settings& s) override { return !s.token.empty(); }
+    UsageStatus fetch(const Settings& s, char* errOut, size_t errLen) override;
 };

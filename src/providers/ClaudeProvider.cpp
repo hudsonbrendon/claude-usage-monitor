@@ -14,7 +14,8 @@
 
 static const char* ENDPOINT = "https://api.anthropic.com/v1/messages";
 
-UsageStatus ClaudeProvider::fetch(const String& token, char* errOut, size_t errLen) {
+UsageStatus ClaudeProvider::fetch(const Settings& s, char* errOut, size_t errLen) {
+    String token(s.token.c_str());
     UsageStatus bad;
 
 #if defined(ESP8266)
