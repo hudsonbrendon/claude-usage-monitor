@@ -2,7 +2,7 @@
   <img src="assets/banner.png" alt="claude-usage-monitor" width="480">
 </p>
 
-<h1 align="center">claude-usage-monitor</h1>
+<h1 align="center">Claude Usage Monitor</h1>
 
 <p align="center">Live Claude API usage — your 5-hour and 7-day rate-limit utilization, with reset countdowns, on a tiny ESP8266 OLED.</p>
 
