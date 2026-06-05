@@ -20,13 +20,13 @@ A from-scratch firmware that polls an AI provider and shows your agent usage on 
 | Provider | Status | Data source |
 |----------|--------|-------------|
 | Claude (Anthropic) | ✅ supported | `anthropic-ratelimit-unified-5h/7d-*` headers on the Messages API |
-| Codex (OpenAI) | 🛠️ planned | `/backend-api/codex/usage` (5h + weekly windows) |
+| Codex (OpenAI) | ✅ supported | `chatgpt.com/backend-api/codex/usage` (5h + weekly windows) |
 
 ## Features
 
 - Rolling 5-hour and weekly rate-limit utilization as on-screen bars, with reset countdowns.
 - One-time setup over a captive Wi-Fi portal — no hardcoded credentials.
-- Single-button UX: tap = screen on/off, long-press = refresh, hold 5 s = factory reset.
+- Single-button UX: tap = switch provider, long-press = refresh, hold 5 s = factory reset.
 - Pluggable `Provider` and board-agnostic `Canvas`/`IBoard` design.
 - Host-side unit tests for the pure logic (parsing, settings) via PlatformIO `native`.
 
@@ -57,8 +57,10 @@ esptool.py --chip esp8266 --baud 460800 write_flash \
 
 1. On first boot the device opens an open Wi-Fi AP `AIUsage-XXXX`.
 2. Join it and open `http://192.168.4.1`.
-3. Enter your 2.4 GHz Wi-Fi and a provider token (for Claude: `claude setup-token`).
-4. It reboots and shows the dashboard.
+3. Enter your 2.4 GHz Wi-Fi and at least one provider:
+   - **Claude:** the token from `claude setup-token`.
+   - **Codex:** the `access_token` and `account_id` from `~/.codex/auth.json` (`jq -r '.tokens.access_token' ~/.codex/auth.json`).
+4. It reboots and shows the dashboard. **Tap the button to switch providers**; long-press refreshes; hold 5 s factory-resets.
 
 ## Adding a provider
 
