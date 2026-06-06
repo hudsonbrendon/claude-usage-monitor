@@ -17,6 +17,8 @@ public:
         g_u8g2.setBusClock(400000);
         g_u8g2.setContrast(255);
         pinMode(0, INPUT_PULLUP);
+        pinMode(2, OUTPUT);
+        digitalWrite(2, HIGH);   // onboard LED is active-LOW; HIGH = off
     }
     Canvas& canvas() override { return _canvas; }
 
@@ -40,6 +42,7 @@ public:
     bool held(uint32_t ms) override { return _prev && (millis() - _downAt >= ms); }
 
     void brightness(uint8_t level) override { g_u8g2.setPowerSave(level == 0 ? 1 : 0); }
+    void led(bool on) override { digitalWrite(2, on ? LOW : HIGH); }
     const char* apPrefix() override { return "AIUsage"; }
 
 private:
