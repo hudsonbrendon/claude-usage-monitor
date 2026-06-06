@@ -1,0 +1,41 @@
+site_name: AI Usage Monitor
+site_description: Live Claude + Codex usage on a tiny ESP8266 OLED
+site_url: https://hudsonbrendon.github.io/ai-usage-monitor/
+repo_url: https://github.com/hudsonbrendon/ai-usage-monitor
+repo_name: hudsonbrendon/ai-usage-monitor
+docs_dir: docs
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle: {icon: material/weather-night, name: Switch to dark mode}
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle: {icon: material/weather-sunny, name: Switch to light mode}
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+plugins:
+  - search
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.snippets
+  - toc:
+      permalink: true
+nav:
+  - Home: index.md
+  - Installation: INSTALL.md
+  - Usage: USAGE.md
+  - Providers: PROVIDERS.md
+  - Architecture: ARCHITECTURE.md
+  - Development: DEVELOPMENT.md
+  - Extending: EXTENDING.md
+  - Troubleshooting: TROUBLESHOOTING.md
+exclude_docs: |
+  superpowers/

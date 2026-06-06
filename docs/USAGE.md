@@ -112,4 +112,4 @@ There is no partial-edit screen. If you need to change your Wi-Fi network, updat
 
 ---
 
-← Back to [README](../README.md)
+← Back to [Home](index.md)

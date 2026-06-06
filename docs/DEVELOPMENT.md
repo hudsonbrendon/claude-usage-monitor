@@ -229,4 +229,4 @@ For a walkthrough of adding a new board or a new provider see
 
 ---
 
-← Back to [README](../README.md)
+← Back to [Home](index.md)

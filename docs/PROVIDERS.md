@@ -123,4 +123,4 @@ TLS connections to both provider endpoints are validated against this embedded r
 
 ---
 
-← Back to [README](../README.md)
+← Back to [Home](index.md)

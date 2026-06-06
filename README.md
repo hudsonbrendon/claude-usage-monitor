@@ -9,6 +9,7 @@
 <p align="center">
   <a href="https://github.com/hudsonbrendon/ai-usage-monitor/actions/workflows/tests.yml"><img src="https://github.com/hudsonbrendon/ai-usage-monitor/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
   <a href="https://github.com/hudsonbrendon/ai-usage-monitor/releases"><img src="https://img.shields.io/github/v/release/hudsonbrendon/ai-usage-monitor" alt="Release"></a>
+  <a href="https://hudsonbrendon.github.io/ai-usage-monitor/"><img src="https://img.shields.io/badge/docs-mkdocs--material-blue" alt="Docs"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/PlatformIO-ESP8266-orange" alt="PlatformIO ESP8266">
   <img src="https://img.shields.io/badge/providers-Claude%20%2B%20Codex-8957e5" alt="Providers">
