@@ -89,7 +89,7 @@ color:#15161a;font-weight:700}</style></head><body><div class=c><h1>AI Usage Mon
 <label>Claude token (run: claude setup-token)</label>
 <input name=token maxlength=200 placeholder="sk-ant-oat01-... (Claude, optional)">
 <label>Codex token (~/.codex/auth.json access_token)</label>
-<input name=codexToken maxlength=2200 placeholder="(optional)">
+<textarea name=codexToken rows=4 placeholder="(optional) paste the long access_token here"></textarea>
 <label>Codex account id</label>
 <input name=codexAccountId maxlength=64 placeholder="(optional)">
 <label>Refresh</label><select name=poll><option value=60>60 s</option>
