@@ -13,62 +13,36 @@
   <img src="https://img.shields.io/badge/PlatformIO-ESP8266-orange" alt="PlatformIO ESP8266">
 </p>
 
-A from-scratch firmware that polls an AI provider and shows your agent usage on a 0.96" OLED. Designed to be multi-provider: a `Provider` interface keeps the data source pluggable, and a `Canvas`/`IBoard` abstraction keeps every screen board-agnostic.
+A from-scratch ESP8266 firmware that shows your AI agent usage on a tiny 0.96" OLED: rolling 5-hour and weekly rate-limit utilization bars, each with a reset countdown, so you always know how much headroom you have left and when it refills. Provider data is fetched through a pluggable `Provider` interface, making it straightforward to add new AI services. Every screen is drawn through a `Canvas`/`IBoard` abstraction, so the display logic is completely board-agnostic and can target different hardware without touching the providers or business logic.
 
 ## Providers
 
 | Provider | Status | Data source |
-|----------|--------|-------------|
+|---|---|---|
 | Claude (Anthropic) | ✅ supported | `anthropic-ratelimit-unified-5h/7d-*` headers on the Messages API |
 | Codex (OpenAI) | ✅ supported | `chatgpt.com/backend-api/codex/usage` (5h + weekly windows) |
 
-## Features
+## Quick start
 
-- Rolling 5-hour and weekly rate-limit utilization as on-screen bars, with reset countdowns.
-- One-time setup over a captive Wi-Fi portal — no hardcoded credentials.
-- Single-button UX: tap = switch provider, long-press = refresh, hold 5 s = factory reset.
-- Pluggable `Provider` and board-agnostic `Canvas`/`IBoard` design.
-- Host-side unit tests for the pure logic (parsing, settings) via PlatformIO `native`.
+1. **Flash a release** — grab the latest `firmware.bin` from [Releases](https://github.com/hudsonbrendon/ai-usage-monitor/releases) and follow [Installation](docs/INSTALL.md) to flash it with `esptool.py` (no toolchain required).
+2. **Set it up over the Wi-Fi portal** — on first boot the device opens an AP; join it, open the captive portal, enter your 2.4 GHz Wi-Fi credentials and at least one provider token. See [Usage](docs/USAGE.md) for the full walkthrough.
+
+You need a 2.4 GHz Wi-Fi network and a valid token for at least one provider (Claude session token or Codex access token + account ID).
+
+## Documentation
+
+- [Installation](docs/INSTALL.md) — flash a prebuilt build or build from source
+- [Usage](docs/USAGE.md) — portal setup, the dashboard, button controls
+- [Providers](docs/PROVIDERS.md) — Claude & Codex: credentials, how they work, caveats
+- [Architecture](docs/ARCHITECTURE.md) — the Canvas / IBoard / Provider design
+- [Development](docs/DEVELOPMENT.md) — build, test, CI/release
+- [Extending](docs/EXTENDING.md) — add a board or a provider
+- [Troubleshooting](docs/TROUBLESHOOTING.md) — common issues and fixes
+- [Contributing](CONTRIBUTING.md) — how to help
 
 ## Hardware
 
-- **ideaspark ESP8266** (ESP-12S) with an integrated **SSD1306 128x64 I2C OLED** (VR:2.1).
-- OLED wired to **SDA = GPIO12, SCL = GPIO14**; the onboard **FLASH** button is on **GPIO0**.
-
-## Build & flash (PlatformIO)
-
-```bash
-pio test -e native        # host unit tests
-pio run  -e ideaspark     # build firmware
-pio run  -e ideaspark -t upload
-```
-
-## Flash a release build (no toolchain)
-
-Grab the latest `firmware.bin` from [Releases](https://github.com/hudsonbrendon/ai-usage-monitor/releases) and flash it at offset `0x0`:
-
-```bash
-esptool.py --chip esp8266 --baud 460800 write_flash \
-  --flash_mode dio --flash_freq 40m --flash_size detect \
-  0x0 ai-usage-monitor-ideaspark-vX.Y.Z.bin
-```
-
-## Setup
-
-1. On first boot the device opens an open Wi-Fi AP `AIUsage-XXXX`.
-2. Join it and open `http://192.168.4.1`.
-3. Enter your 2.4 GHz Wi-Fi and at least one provider:
-   - **Claude:** the token from `claude setup-token`.
-   - **Codex:** the `access_token` and `account_id` from `~/.codex/auth.json` (`jq -r '.tokens.access_token' ~/.codex/auth.json`).
-4. It reboots and shows the dashboard. **Tap the button to switch providers**; long-press refreshes; hold 5 s factory-resets.
-
-## Adding a provider
-
-Providers are additive — implement the `Provider` interface (`id()` + `fetch()`) in `src/providers/<name>.cpp`, then select it. No screen, board, or logic code changes.
-
-## Adding a board
-
-Boards are additive — see [`docs/EXTENDING.md`](docs/EXTENDING.md): drop a `src/boards/<name>.cpp` implementing `IBoard`, add a PlatformIO env, and (only for a new display technology) a `Canvas` subclass.
+**ideaspark ESP8266** (ESP-12S) with an integrated **SSD1306 128x64 I2C OLED** (VR:2.1). The OLED is wired to **SDA = GPIO12** and **SCL = GPIO14**; the onboard **FLASH** button is on **GPIO0**.
 
 ## License
 
