@@ -36,6 +36,11 @@ UsageStatus parseCodexUsage(const char* json) {
     return s;
 }
 
+bool overThreshold(const UsageStatus& u, uint8_t pct) {
+    if (!u.valid || pct == 0) return false;
+    return u.h5Percent >= (float)pct || u.d7Percent >= (float)pct;
+}
+
 void formatCountdown(uint32_t epoch, uint32_t now, char* out, size_t outLen) {
     if (epoch == 0)   { snprintf(out, outLen, "--");  return; }
     if (epoch <= now) { snprintf(out, outLen, "now"); return; }

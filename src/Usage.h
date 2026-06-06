@@ -21,3 +21,6 @@ UsageStatus parseCodexUsage(const char* json);
 
 // "3d4h" / "2h05m" / "12m" / "now" / "--" into out.
 void formatCountdown(uint32_t epoch, uint32_t now, char* out, size_t outLen);
+
+// True if usage is valid, pct > 0, and either window is at/over pct (0..100).
+bool overThreshold(const UsageStatus& u, uint8_t pct);

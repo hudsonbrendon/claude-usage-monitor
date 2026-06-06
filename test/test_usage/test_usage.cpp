@@ -62,6 +62,11 @@ void test_codex_parse_malformed_invalid(void) {
     UsageStatus s = parseCodexUsage("{not json");
     TEST_ASSERT_FALSE(s.valid);
 }
+void test_over_threshold_hit(void) { UsageStatus u; u.valid=true; u.h5Percent=82; u.d7Percent=10; TEST_ASSERT_TRUE(overThreshold(u,80)); }
+void test_over_threshold_weekly(void) { UsageStatus u; u.valid=true; u.h5Percent=10; u.d7Percent=95; TEST_ASSERT_TRUE(overThreshold(u,80)); }
+void test_over_threshold_under(void) { UsageStatus u; u.valid=true; u.h5Percent=50; u.d7Percent=50; TEST_ASSERT_FALSE(overThreshold(u,80)); }
+void test_over_threshold_disabled(void) { UsageStatus u; u.valid=true; u.h5Percent=99; u.d7Percent=99; TEST_ASSERT_FALSE(overThreshold(u,0)); }
+void test_over_threshold_invalid(void) { UsageStatus u; u.valid=false; u.h5Percent=99; TEST_ASSERT_FALSE(overThreshold(u,80)); }
 void setUp(void) {}
 void tearDown(void) {}
 int main(int, char**) {
@@ -78,5 +83,10 @@ int main(int, char**) {
     RUN_TEST(test_codex_parse_typical);
     RUN_TEST(test_codex_parse_no_ratelimit_invalid);
     RUN_TEST(test_codex_parse_malformed_invalid);
+    RUN_TEST(test_over_threshold_hit);
+    RUN_TEST(test_over_threshold_weekly);
+    RUN_TEST(test_over_threshold_under);
+    RUN_TEST(test_over_threshold_disabled);
+    RUN_TEST(test_over_threshold_invalid);
     return UNITY_END();
 }
