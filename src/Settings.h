@@ -9,6 +9,7 @@ struct Settings {
     std::string token;            // Claude OAuth token (claude setup-token)
     std::string codexToken;       // Codex access_token (~/.codex/auth.json)
     std::string codexAccountId;   // Codex account_id
+    std::string codexRefreshToken;   // Codex OAuth refresh_token (auto-renews the access token)
     uint16_t    pollSeconds = 120;
     uint8_t     alertPercent = 80;   // warn at/over this % (0 = alerts off)
     bool        configured   = false;

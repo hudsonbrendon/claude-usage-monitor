@@ -8,6 +8,7 @@ bool settingsToJson(const Settings& s, char* out, size_t outLen) {
     doc["token"] = s.token;
     doc["codexToken"] = s.codexToken;
     doc["codexAccountId"] = s.codexAccountId;
+    doc["codexRefreshToken"] = s.codexRefreshToken;
     doc["pollSeconds"] = s.pollSeconds;
     doc["alertPercent"] = s.alertPercent;
     size_t n = serializeJson(doc, out, outLen);
@@ -20,12 +21,13 @@ bool settingsFromJson(const char* json, Settings& s) {
     s.ssid          = doc["ssid"]          | "";
     s.password      = doc["password"]      | "";
     s.token         = doc["token"]         | "";
-    s.codexToken    = doc["codexToken"]    | "";
-    s.codexAccountId= doc["codexAccountId"]| "";
+    s.codexToken        = doc["codexToken"]        | "";
+    s.codexAccountId    = doc["codexAccountId"]    | "";
+    s.codexRefreshToken = doc["codexRefreshToken"] | "";
     s.pollSeconds   = doc["pollSeconds"]   | (uint16_t)120;
     s.alertPercent  = doc["alertPercent"]  | (uint8_t)80;
     bool hasClaude = !s.token.empty();
-    bool hasCodex  = !s.codexToken.empty() && !s.codexAccountId.empty();
+    bool hasCodex  = !s.codexAccountId.empty() && (!s.codexToken.empty() || !s.codexRefreshToken.empty());
     s.configured = !s.ssid.empty() && (hasClaude || hasCodex);
     return true;
 }
